@@ -8,6 +8,7 @@ use Tessera\Services\TesseraManager;
 
 /**
  * @method static Token generate(string $action, string $identifier)
+ * @method static TokenVerifyResponse verify(string $action, string $identifier, string $sec, string $code)
  * @see TesseraManager
  */
 class Tessera extends Facade

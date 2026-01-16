@@ -52,8 +52,8 @@ class TesseraManager {
     }
 
     public function verify(
-        string $identifier,
         string $action,
+        string $identifier,
         string $sec,
         string $code
     ): TokenVerifyResponse {
