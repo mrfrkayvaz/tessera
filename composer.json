@@ -1,0 +1,54 @@
+{
+  "name": "mrfrkayvaz/tessera",
+  "description": "A Laravel package that designed to generate, manage and validate secure one-time passwords (OTP) for enhanced user authentication and multi-factor security workflows.",
+  "keywords": ["laravel", "authentication", "password", "one-time-password", "otp", "multi-factor", "2FA"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ömer Faruk Ayvaz",
+      "email": "mrfrkayvaz@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^8.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Tessera\\": "src/",
+      "Tessera\\Tests\\": "tests"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tessera\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Tessera\\TesseraServiceProvider"
+      ],
+      "aliases": {
+        "Tessera": "Tessera\\Facades\\Tessera"
+      }
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "require-dev": {
+    "orchestra/testbench": "^10.6",
+    "pestphp/pest": "^4.0",
+    "pestphp/pest-plugin-laravel": "^4.0",
+    "phpstan/phpstan": "^1.10.50"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/pest",
+    "analyse": "phpstan analyse --memory-limit=1G --no-progress",
+    "baseline": "./vendor/bin/phpstan analyse --memory-limit=2G --generate-baseline"
+  }
+}
