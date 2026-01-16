@@ -51,6 +51,20 @@ class TesseraManager {
         return now()->addMinutes($expiration_minutes);
     }
 
+    public function getToken(
+        string $action,
+        string $identifier,
+        string $sec,
+        string $code
+    ): Token | null {
+        return Token::where([
+            'identifier' => $identifier,
+            'action' => $action,
+            'sec' => $sec,
+            'code' => $code
+        ])->latest();
+    }
+
     public function verify(
         string $action,
         string $identifier,
