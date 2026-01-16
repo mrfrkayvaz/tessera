@@ -5,7 +5,9 @@ namespace Tessera\Services;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Random\RandomException;
+use Tessera\DTOs\TokenVerifyResponse;
 use Tessera\Models\Token;
+use Tessera\Support\TesseraErrors;
 
 class TesseraManager {
     /**
@@ -47,5 +49,57 @@ class TesseraManager {
     public function getExpiredAt(): Carbon {
         $expiration_minutes = config('tessera.expiration_minutes', 5);
         return now()->addMinutes($expiration_minutes);
+    }
+
+    public function verify(
+        string $identifier,
+        string $action,
+        string $sec,
+        string $code
+    ): TokenVerifyResponse {
+        $token = Token::where([
+            'identifier' => $identifier,
+            'action' => $action,
+            'sec' => $sec
+        ])->latest();
+
+        $response = $this->check($token, $code);
+        $token->increment('attempts');
+
+        return $response;
+    }
+
+    public function check(Token | null $token, string $code): TokenVerifyResponse {
+        if (!$token) {
+            return new TokenVerifyResponse(
+                verified: false,
+                error: TesseraErrors::TOKEN_NOT_FOUND
+            );
+        }
+
+        if ($token->attempts >= $token->max_attempts) {
+            return new TokenVerifyResponse(
+                verified: false,
+                error: TesseraErrors::TOKEN_MAX_ATTEMPTS_REACHED
+            );
+        }
+
+        if ($token->expires_at > now()) {
+            return new TokenVerifyResponse(
+                verified: false,
+                error: TesseraErrors::TOKEN_EXPIRED
+            );
+        }
+
+        if ($token->code !== $code) {
+            return new TokenVerifyResponse(
+                verified: false,
+                error: TesseraErrors::TOKEN_CODE_MISMATCH
+            );
+        }
+
+        return new TokenVerifyResponse(
+            verified: true
+        );
     }
 }
