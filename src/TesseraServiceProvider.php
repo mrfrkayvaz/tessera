@@ -30,6 +30,12 @@ class TesseraServiceProvider extends ServiceProvider
             __DIR__ . '/../config/tessera.php' => config_path('tessera.php'),
         ], 'tessera-config');
 
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__ . '/../database/migrations/create_tessera_tokens_table.php' => database_path('migrations/' . date('Y_m_d_His', time()) . 'create_tessera_tokens_table.php'),
+            ], 'tessera-migrations');
+        }
+
         $this->registerObservers();
     }
 
