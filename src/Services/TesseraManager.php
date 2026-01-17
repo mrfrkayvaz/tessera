@@ -108,7 +108,7 @@ class TesseraManager {
             );
         }
 
-        if ($token->expires_at > now()) {
+        if ($token->expires_at <= now()) {
             return new TokenVerifyResponse(
                 verified: false,
                 error: TesseraErrors::TOKEN_EXPIRED
