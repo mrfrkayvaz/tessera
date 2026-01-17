@@ -58,7 +58,7 @@ class TesseraManager {
         return Token::where([
             'identifier' => $identifier,
             'action' => $action,
-        ])->latest();
+        ])->latest()->first();
     }
 
     public function getTokenVerified(
@@ -72,7 +72,7 @@ class TesseraManager {
             'action' => $action,
             'secret' => $sec,
             'code' => $code
-        ])->latest();
+        ])->latest()->first();
     }
 
     public function verify(
