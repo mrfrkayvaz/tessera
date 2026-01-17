@@ -54,6 +54,16 @@ class TesseraManager {
     public function getToken(
         string $action,
         string $identifier,
+    ): Token | null {
+        return Token::where([
+            'identifier' => $identifier,
+            'action' => $action,
+        ])->latest();
+    }
+
+    public function getTokenVerified(
+        string $action,
+        string $identifier,
         string $sec,
         string $code
     ): Token | null {
