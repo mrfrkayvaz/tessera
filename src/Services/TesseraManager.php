@@ -26,7 +26,7 @@ class TesseraManager {
             'code' => $code,
             'max_attempts' => $max_attempts,
             'attempts' => $attempts,
-            'sec' => $sec,
+            'secret' => $sec,
             'expires_at' => $expires_at
         ]);
     }
@@ -60,7 +60,7 @@ class TesseraManager {
         return Token::where([
             'identifier' => $identifier,
             'action' => $action,
-            'sec' => $sec,
+            'secret' => $sec,
             'code' => $code
         ])->latest();
     }
@@ -74,7 +74,7 @@ class TesseraManager {
         $token = Token::where([
             'identifier' => $identifier,
             'action' => $action,
-            'sec' => $sec
+            'secret' => $sec
         ])->latest();
 
         $response = $this->check($token, $code);

@@ -5,7 +5,7 @@ namespace Tessera\Tests;
 use Tessera\Facades\Tessera;
 use Illuminate\Support\Facades\DB;
 
-it('test', function () {
+it('should generate a token', function () {
     $user_id = DB::table('users')->insertGetId([
         'name' => 'Test User',
         'email' => 'test@example.com',
