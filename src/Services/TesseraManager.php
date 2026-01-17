@@ -85,7 +85,7 @@ class TesseraManager {
             'identifier' => $identifier,
             'action' => $action,
             'secret' => $sec
-        ])->latest();
+        ])->latest()->first();
 
         $response = $this->check($token, $code);
         $token->increment('attempts');
