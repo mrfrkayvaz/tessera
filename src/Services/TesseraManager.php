@@ -10,17 +10,29 @@ use Tessera\Models\Token;
 use Tessera\Support\TesseraErrors;
 
 class TesseraManager {
+    public static string $tokenModel = Token::class;
+
+    public static function useTokenModel(string $model): void
+    {
+        static::$tokenModel = $model;
+    }
+
     /**
+     * @param string $action
+     * @param string $identifier
+     * @return Token
      * @throws RandomException
      */
-    public function generate(string $action, string $identifier): Token {
+    public function generate(string $action, string $identifier): Token
+    {
         $code = $this->generateCode();
         $max_attempts = $this->getMaxAttempts();
         $attempts = 0;
         $sec = $this->generateSec();
         $expires_at = $this->getExpiredAt();
 
-        return Token::create([
+        $model = self::$tokenModel;
+        return $model::create([
             'action' => $action,
             'identifier' => $identifier,
             'code' => $code,
@@ -55,7 +67,8 @@ class TesseraManager {
         string $action,
         string $identifier,
     ): Token | null {
-        return Token::where([
+        $model = self::$tokenModel;
+        return $model::where([
             'identifier' => $identifier,
             'action' => $action,
         ])->latest()->first();
@@ -67,7 +80,8 @@ class TesseraManager {
         string $sec,
         string $code
     ): Token | null {
-        return Token::where([
+        $model = self::$tokenModel;
+        return $model::where([
             'identifier' => $identifier,
             'action' => $action,
             'secret' => $sec,
@@ -81,7 +95,8 @@ class TesseraManager {
         string $sec,
         string $code
     ): TokenVerifyResponse {
-        $token = Token::where([
+        $model = self::$tokenModel;
+        $token = $model::where([
             'identifier' => $identifier,
             'action' => $action,
             'secret' => $sec
